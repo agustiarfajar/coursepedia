@@ -39,41 +39,34 @@ include_once("layout.php");
             else if($success == 3)
               showSuccess("Data berhasil dihapus.");
         }
+
+        if(isset($_GET["warning"]))
+        {
+          $warning = $_GET["warning"];
+          if($warning = "perubahan")
+            showWarning("Tidak ada perubahan data.");
+        }
+
+        if(isset($_GET["error"]))
+        {
+            $Error = $_GET["error"];
+            if($Error == "id")
+              showError("ID Kelas sudah ada.");
+            else if($Error == "input")
+              showError("Kesalahan format masukan : \n".$_SESSION["salahinputkelas"]);
+            else if($Error == "proses")
+              showError("Terjadi kesalahan, silahkan melakukan proses dengan benar");
+            else if($Error == "fk")
+              showError("Terjadi kesalahan: ".$_SESSION["fk"]);
+        }
       ?>
     <button type="button" class="btn btn-app" data-toggle="modal" data-target="#modal-lg">
         <i class="fas fa-plus"></i> Tambah
       </button>
-
-      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning">
-                  Launch Warning Modal
-                </button>
-
-       <div class="modal fade" id="modal-warning">
-        <div class="modal-dialog">
-          <div class="modal-content bg-warning">
-            <div class="modal-header">
-              <h4 class="modal-title">Warning Modal</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-outline-dark">Save changes</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
       
       <div class="modal fade" id="modal-lg">
         <div class="modal-dialog modal-lg">
-        <form action="admin-gurustaff-simpan.php" method="post">
+        <form action="admin-kelas-simpan.php" method="post">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Tambah Data Kelas</h4>
@@ -90,13 +83,11 @@ include_once("layout.php");
                   <div class="form-group">
                     <label for="nama">Nama Kelas</label>
                     <input type="text" class="form-control" id="nama" maxlength="50" name="nama" placeholder="Masukan Nama Kelas" autocomplete="off">
-                  </div>    
+                  </div>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                  <button type="button" onclick="konfirmasiSimpan()" name="btnSimpan" class="btn btn-primary" style="float:right">Simpan</button>    
                 </div>
                 <!-- /.card-body -->
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-              <button type="submit" name="btnSimpan" class="btn btn-primary">Simpan</button>
             </div>
           </div>
           </form>
@@ -140,8 +131,8 @@ include_once("layout.php");
                                   <td class='dtr-control sorting_1' tabindex='0'>".$row['id_kelas']."</td>
                                   <td>".$row['nama']."</td>
                                   <td>
-                                      <a href='admin-kelas-edit.php?id_kelas=".$row['id_kelas']."' class='btn btn-sm btn-info'><i class='fas fa-edit'></i></a> | 
-                                      <a href='admin-kelas.php?aksi=hapus&id_kelas=".$row['id_kelas']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
+                                      <a href='admin-kelas-form-edit.php?id_kelas=".$row['id_kelas']."' class='btn btn-sm btn-info'><i class='fas fa-edit'></i></a> | 
+                                      <a href='admin-kelas-form-hapus.php?id_kelas=".$row['id_kelas']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
                                   </td>
                               </tr>";
                               }
@@ -180,4 +171,25 @@ include_once("layout.php");
       "responsive": true,
     });
   });
+
+  // Sweetalert
+  function konfirmasiSimpan()
+  {
+      event.preventDefault();
+      var form = event.target.form;
+      Swal.fire({
+          icon: "question",
+          title: "Konfirmasi",
+          text: "Apakah anda yakin ingin menyimpan data?",
+          showCancelButton: true,
+          confirmButtonText: "Simpan",
+          cancelButtonText: "Batal"
+      }).then((result) => {
+          if(result.value) {
+              form.submit();
+          } else {
+              Swal.fire("Informasi","Data batal disimpan.","error");
+          }
+      });
+  }
 </script>

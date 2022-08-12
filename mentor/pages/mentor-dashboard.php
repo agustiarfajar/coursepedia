@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION["id_admin"]))
+if(!isset($_SESSION["id_mentor"]))
 {
     header("Location: ../index.php?error=4");
 }
@@ -26,84 +26,47 @@ include_once("layout.php");
     </div>
     <!-- /.content-header -->
     <?php 
-      $jmlAnggota = countAnggota();
-      $jmlKelas = countKelas();
-      $jmlPaket = countPaket();
-      $jmlMentor = countMentor();
+      $jmlKategori = countKategori();
+      $jmlMateri = countMateri();
     ?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-6 col-6">
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
                 <h3>
-                  <?php echo $jmlAnggota["jml_anggota"] ?>
+                  <?php echo $jmlKategori["jml_kategori"] ?>
                 </h3>
 
-                <p>Anggota</p>
+                <p>Kategori Materi</p>
               </div>
               <div class="icon">
-                <i class="fas fa-user"></i>
+                <i class="fas fa-list-ol"></i>
               </div>
-              <a href="admin-anggota.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-6 col-6">
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
                 <h3>
-                  <?php echo $jmlKelas["jml_kelas"] ?>
+                  <?php echo $jmlMateri["jml_materi"] ?>
                 </h3>
 
-                <p>Kelas</p>
-              </div>
-              <div class="icon">
-                <i class="fas fa-landmark"></i>
-              </div>
-              <a href="admin-kelas.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>
-                <?php echo $jmlPaket["jml_paket"] ?>
-                </h3>
-
-                <p>Paket Belajar</p>
+                <p>Materi</p>
               </div>
               <div class="icon">
                 <i class="fas fa-book"></i>
               </div>
-              <a href="admin-paketbelajar.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h3>
-                  <?php echo $jmlMentor["jml_mentor"] ?>
-                </h3>
-
-                <p>Mentor</p>
-              </div>
-              <div class="icon">
-                <i class="fas fa-user"></i>
-              </div>
-              <a href="admin-mentor.php" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
         </div>
         <!-- /.row -->
         <!-- Main row -->
@@ -113,30 +76,28 @@ include_once("layout.php");
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Anggota Coursepedia Baru Bergabung</h3>
+                <h3 class="card-title">Materi Yang Baru Ditambahkan</h3>
               <!-- /.card-header -->
               <div class="card-body p-0">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>No</th>
+                      <th>No.</th>
                       <th>Kode</th>
-                      <th>Nama</th>
-                      <th>Tanggal Bergabung</th>
-                      <th>Pilihan Paket</th>
+                      <th>Materi</th>
+                      <th>Kelas</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <?php 
+                  <?php 
                     $db = dbConnect();
                     $i = 0;
                     if($db->connect_errno==0)
                     {
-                        $sql = "SELECT a.id_anggota,a.tgl_pembayaran,b.nama as namaAnggota,c.nama as namaPaket
-                                FROM tagihan as a 
-                                INNER JOIN anggota as b ON a.id_anggota = b.id_anggota
-                                INNER JOIN paket_belajar as C ON a.id_paket = c.id_paket
-                                ORDER BY a.tgl_pembayaran DESC
+                        $sql = "SELECT a.id_materi,a.nama as materi,b.nama as kelas
+                                FROM materi as a
+                                INNER JOIN kelas as b ON a.id_kelas = b.id_kelas
+                                ORDER BY a.id_materi DESC
                                 LIMIT 5";
                         $res = $db->query($sql);
                         if($res)
@@ -147,10 +108,9 @@ include_once("layout.php");
                                 ?>
                                 <tr>
                                   <td><?php echo ++$i ?></td>
-                                  <td><?php echo $row["id_anggota"] ?></td>
-                                  <td><?php echo $row["namaAnggota"] ?></td>
-                                  <td><?php echo $row["tgl_pembayaran"] ?></td>
-                                  <td><?php echo $row["namaPaket"] ?></td>
+                                  <td><?php echo $row["id_materi"] ?></td>
+                                  <td><?php echo $row["materi"] ?></td>
+                                  <td><span class="badge badge-danger"><?php echo $row["kelas"] ?></span></td>
                                 </tr>
                                 <?php
                             }

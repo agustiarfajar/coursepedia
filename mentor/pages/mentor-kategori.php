@@ -1,6 +1,6 @@
 <?php 
 session_start();
-if(!isset($_SESSION["id_admin"]))
+if(!isset($_SESSION["id_mentor"]))
 {
     header("Location: ../index.php?error=4");
 }
@@ -13,12 +13,12 @@ include_once("layout.php");
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Paket Belajar</h1>
+            <h1 class="m-0">Kategori</h1>
           </div><!-- /.col -->   
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="admin-dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">Paket</li>
+              <li class="breadcrumb-item"><a href="mentor-dashboard.php">Home</a></li>
+              <li class="breadcrumb-item active">Kategori</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -42,34 +42,51 @@ include_once("layout.php");
 
         if(isset($_GET["warning"]))
         {
-            $wrn = $_GET["warning"];
-            if($wrn == "perubahan")
-                showWarning("Tidak ada perubahan data.");                       
+          $warning = $_GET["warning"];
+          if($warning = "perubahan")
+            showWarning("Tidak ada perubahan data.");
         }
 
         if(isset($_GET["error"]))
         {
             $Error = $_GET["error"];
             if($Error == "id")
-              showError("ID Paket sudah ada.");
+              showError("ID Kategori sudah ada.");
             else if($Error == "input")
-              showError("Kesalahan format masukan :<br> ".$_SESSION["salahinputpaket"]);
+              showError("Kesalahan format masukan : \n".$_SESSION["salahinputkelas"]);
             else if($Error == "proses")
               showError("Terjadi kesalahan, silahkan melakukan proses dengan benar");
             else if($Error == "fk")
-              showError("Terjadi kesalahan ".$_SESSION["fk"]);
+              showError("Terjadi kesalahan: ".$_SESSION["fk"]);
         }
+
       ?>
-    <button type="button" class="btn btn-app" data-toggle="modal" data-target="#modal-lg">
+          <button type="button" class="btn btn-app" data-toggle="modal" data-target="#modal-lg">
         <i class="fas fa-plus"></i> Tambah
       </button>
-      
+      <script type="text/javascript" language="javascript">
+        function validasidatakategori() {
+          var id_kategori=document.frm.id_kategori.value.trim();
+          if(id_kategori.length==0){
+            alert("ID Kategori tidak boleh kosong.");
+            document.frm.id_kategori.focus();
+            return false;
+          }
+          var nama=document.frm.nama.value.trim();
+          if(nama.length==0){
+            alert("Nama Kategori Materi tidak boleh kosong.");
+            document.frm.nama.focus();
+            return false;
+          }
+        return true;
+        }
+        </script>
       <div class="modal fade" id="modal-lg">
         <div class="modal-dialog modal-lg">
-        <form action="admin-paketbelajar-simpan.php" method="post">
+        <form action="mentor-kategori-tambah.PHP" name="frm" method="post" onsubmit="return validasidatakategori()">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Tambah Data Paket Belajar</h4>
+              <h4 class="modal-title">Tambah Data Kategori Materi</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -77,44 +94,19 @@ include_once("layout.php");
             <div class="modal-body">  
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="id_paket">Kode Paket</label>
-                    <input type="text" class="form-control" id="id_paket" maxlength="8" name="id_paket" value="<?php echo kodeOtomatisPaket() ?>" autocomplete="off" readonly>
+                    <label for="id_kategori">ID Kategori</label>
+                    <input type="text" class="form-control" id="id_kategori" maxlength="8" name="id_kategori" value="<?php echo kodeOtomatisKategori()?>" autocomplete="off" readonly>
                   </div>
                   <div class="form-group">
-                    <label for="id_kelas">Kelas</label>
-                    <select class="form-control" name="id_kelas" id="id_kelas">
-                      <option value="">Pilih Kelas</option>
-                      <?php 
-                        $db = dbConnect();
-                        if($db->connect_errno==0)
-                        {
-                            $sql = "SELECT * FROM kelas";
-                            $res = $db->query($sql);
-                            if($res)
-                            {
-                                $data = $res->fetch_all(MYSQLI_ASSOC);
-                                foreach($data as $row)
-                                {
-                                  echo "<option value='".$row["id_kelas"]."'>".$row["nama"]."</option>";
-                                }
-                                $res->free();
-                            }
-                        }
-                      ?>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="nama">Nama Paket</label>
-                    <input type="text" class="form-control" id="nama" maxlength="50" name="nama" placeholder="Masukan Nama Paket" autocomplete="off">
+                    <label for="nama">Nama Kategori</label>
+                    <input type="text" class="form-control" id="nama" maxlength="50" name="nama" placeholder="Masukan Nama Kategori" autocomplete="off">
                   </div>    
-                  <div class="form-group">
-                    <label for="harga">Harga Paket</label>
-                    <input type="text" class="form-control" id="harga" maxlength="50" name="harga" placeholder="Masukan Harga Paket" autocomplete="off">
-                  </div>
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                  <button type="button" onclick="konfirmasiSimpan()" name="btnSimpan" class="btn btn-primary" style="float:right">Simpan</button>
                 </div>
                 <!-- /.card-body -->
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+              <button type="button" onclick="konfirmasiSimpan()" name="btnSimpan" class="btn btn-primary">Simpan</button>
             </div>
           </div>
           </form>
@@ -123,12 +115,14 @@ include_once("layout.php");
         <!-- /.modal-dialog -->
       </div>
       <!-- /.modal -->
+    <!-- Main content -->
+    <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Data Paket</h3>
+                <h3 class="card-title">Kategori</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -136,10 +130,8 @@ include_once("layout.php");
                   <table id="example1" class="table table-bordered table-striped dataTable dtr-inline" aria-describedby="example1_info">
                     <thead>
                     <tr>
-                      <th class="sorting sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending">ID Paket</th>
-                      <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Nama Paket</th>
-                      <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Kelas</th>
-                      <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Harga</th>
+                      <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">ID Kategori</th>
+                      <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Nama</th>
                       <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">Aksi</th>
                     </tr>
                     </thead>
@@ -148,22 +140,19 @@ include_once("layout.php");
                       $db = dbConnect();
                       if($db->connect_errno==0)
                       {
-                          $sql = "SELECT a.*,b.nama as kelas FROM 
-                          paket_belajar as a INNER JOIN kelas as b ON a.id_kelas=b.id_kelas";
+                          $sql = "SELECT * FROM kategori_materi";
                           $res = $db->query($sql);
                           if($res)
                           {
-                              $data_paket = $res->fetch_all(MYSQLI_ASSOC);
-                              foreach($data_paket as $row)
+                              $data_kategori = $res->fetch_all(MYSQLI_ASSOC);
+                              foreach($data_kategori as $row)
                               {
                                 echo "<tr>
-                                  <td class='dtr-control sorting_1' tabindex='0'>".$row['id_paket']."</td>
+                                  <td class='dtr-control sorting_1' tabindex='0'>".$row['id_kategori']."</td>
                                   <td>".$row['nama']."</td>
-                                  <td>".$row['kelas']."</td>
-                                  <td>".number_format($row['harga'],0,',','.')."</td>
                                   <td>
-                                      <a href='admin-paketbelajar-form-edit.php?id_paket=".$row['id_paket']."' class='btn btn-sm btn-info'><i class='fas fa-edit'></i></a> | 
-                                      <a href='admin-paketbelajar-form-hapus.php?id_paket=".$row['id_paket']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
+                                      <a href='mentor-kategori-edit.php?id_kategori=".$row['id_kategori']."' class='btn btn-sm btn-info'><i class='fas fa-edit'></i></a> | 
+                                      <a href='mentor-kategori-hapus.php?id_kategori=".$row['id_kategori']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
                                   </td>
                               </tr>";
                               }
@@ -202,10 +191,9 @@ include_once("layout.php");
       "responsive": true,
     });
   });
-</script>
-<script>
-    // Sweetalert
-    function konfirmasiSimpan()
+
+  // Sweetalert
+  function konfirmasiSimpan()
     {
         event.preventDefault();
         var form = event.target.form;

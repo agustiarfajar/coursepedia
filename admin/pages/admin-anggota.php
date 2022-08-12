@@ -25,9 +25,41 @@ include_once("layout.php");
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
+    
     <!-- Main content -->
     <section class="content">
+    <?php 
+      if(isset($_GET["success"]))
+      {
+          $success = $_GET["success"];
+          if($success == 1)
+            showSuccess("Data berhasil disimpan.");
+          else if($success == 2)
+            showSuccess("Data berhasil diubah.");
+          else if($success == 3)
+            showSuccess("Data berhasil dihapus.");
+      }
+
+      if(isset($_GET["warning"]))
+      {
+        $warning = $_GET["warning"];
+        if($warning = "perubahan")
+          showWarning("Tidak ada perubahan data.");
+      }
+
+      if(isset($_GET["error"]))
+      {
+          $Error = $_GET["error"];
+          if($Error == "id")
+            showError("ID Kelas sudah ada.");
+          else if($Error == "input")
+            showError("Kesalahan format masukan : \n".$_SESSION["salahinputkelas"]);
+          else if($Error == "proses")
+            showError("Terjadi kesalahan, silahkan melakukan proses dengan benar");
+          else if($Error == "fk")
+            showError("Terjadi kesalahan: ".$_SESSION["fk"]);
+      }
+    ?>
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
@@ -73,9 +105,8 @@ include_once("layout.php");
                                   <td>".$row['alamat']."</td>
                                   <td>".$row['no_telp']."</td>
                                   <td>".$row['id_paket']."</td>
-                                  <td>
-                                      <a href='admin-anggota.php?aksi=ubah&id_anggota=".$row['id_anggota']."' class='btn btn-sm btn-info'><i class='fas fa-edit'></i></a> | 
-                                      <a href='admin-anggota.php?aksi=hapus&id_anggota=".$row['id_anggota']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
+                                  <td>                                    
+                                      <a href='admin-anggota-form-hapus.php?id_anggota=".$row['id_anggota']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
                                   </td>
                               </tr>";
                               }

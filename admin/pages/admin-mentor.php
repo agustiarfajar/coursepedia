@@ -4,8 +4,30 @@ if(!isset($_SESSION["id_admin"]))
 {
     header("Location: ../index.php?error=4");
 }
-include_once("functions.php");
-include_once("layout.php");
+  include_once("functions.php");
+  include_once("layout.php");
+
+
+  $db = dbConnect();
+
+  if(isset($_POST['btnSimpan'])){
+    $id = $db->escape_string($_POST['id_mentor']);
+    $nama = $db->escape_string($_POST['nama_mentor']);
+    $jk = $db->escape_string($_POST['jk']);
+    $alamat = $db->escape_string($_POST['alamat']);
+    $no_telp = $db->escape_string($_POST['no_hp']);
+    $username = $db->escape_string($_POST['username']);
+    $password = $db->escape_string($_POST['password']);
+
+    $sql = "INSERT INTO mentor VALUES ('$id', '$nama', '$jk', '$alamat', '$no_telp', '$username', PASSWORD('$password'))";
+    $res = $db->query($sql);
+
+    if($res){
+      header("Location: admin-mentor.php?success=1");
+    }else{
+      header("Location: admin-mentor.php?error=proses");
+    }
+  }
 ?>
 <?php style_section() ?>
 <?php top_section() ?>
@@ -28,9 +50,96 @@ include_once("layout.php");
 
     <!-- Main content -->
     <section class="content">
-      <a class="btn btn-app">
+    <?php 
+        if(isset($_GET["success"]))
+        {
+            $success = $_GET["success"];
+            if($success == 1)
+              showSuccess("Data berhasil disimpan.");
+            else if($success == 2)
+              showSuccess("Data berhasil diubah.");
+            else if($success == 3)
+              showSuccess("Data berhasil dihapus.");
+        }
+
+        if(isset($_GET["warning"]))
+        {
+          $warning = $_GET["warning"];
+          if($warning = "perubahan")
+            showWarning("Tidak ada perubahan data.");
+        }
+
+        if(isset($_GET["error"]))
+        {
+            $Error = $_GET["error"];
+            if($Error == "id")
+              showError("ID mentor sudah ada.");
+            else if($Error == "input")
+              showError("Kesalahan format masukan : \n".$_SESSION["salahinputmentor"]);
+            else if($Error == "proses")
+              showError("Terjadi kesalahan, silahkan melakukan proses dengan benar");
+            else if($Error == "fk")
+              showError("Terjadi kesalahan: ".$_SESSION["fk"]);
+        }
+      ?>
+      <button type="button" class="btn btn-app" data-toggle="modal" data-target="#modal-lg">
         <i class="fas fa-plus"></i> Tambah
-      </a>
+      </button>
+
+      <!-- Modal tambah mentor -->
+      <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+          <form action="" method="post">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Tambah Data Mentor</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="id_mentor">ID Mentor</label>
+                  <input type="text" class="form-control" id="id_mentor" name="id_mentor" value="<?php echo kodeOtomatisMentor()?>" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="nama_mentor">Nama Mentor</label>
+                  <input type="text" class="form-control" id="nama_mentor" name="nama_mentor" placeholder="Masukan Nama Mentor" autocomplete="off" required>
+                </div>
+                <div class="form-group">
+                  <label for="jk">Jenis Kelamin</label>
+                  <select class="form-control" id="jk" name="jk" required>
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="L">Laki-Laki</option>
+                    <option value="P">Perempuan</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="alamat">Alamat</label>
+                  <textarea class="form-control" id="alamat" name="alamat" placeholder="Masukan Alamat" required></textarea>  
+                </div>
+                <div class="form-group">
+                  <label for="no_hp">No. HP</label>
+                  <input type="text" class="form-control" maxlength="13" id="no_hp" name="no_hp" placeholder="Masukan No. HP" autocomplete="off" required>
+                </div>
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" class="form-control" id="username" name="username" placeholder="Masukan Username" autocomplete="off" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Masukan Password" autocomplete="off" required>
+                </div>  
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary" id="btnSimpan" name="btnSimpan">Simpan</button>
+              </div>              
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
@@ -75,8 +184,8 @@ include_once("layout.php");
                                   <td>".$row['username']."</td>
                                   <td>".substr($row['pass'],0, 10)."</td>
                                   <td>
-                                      <a href='admin-mentor.php?aksi=ubah&id_mentor=".$row['id_mentor']."' class='btn btn-sm btn-info'><i class='fas fa-edit'></i></a> | 
-                                      <a href='admin-mentor.php?aksi=hapus&id_mentor=".$row['id_mentor']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
+                                      <a href='admin-mentor-form-edit.php?id_mentor=".$row['id_mentor']."' class='btn btn-sm btn-info'><i class='fas fa-edit'></i></a> | 
+                                      <a href='admin-mentor-form-hapus.php?id_mentor=".$row['id_mentor']."' class='btn btn-sm btn-danger'><i class='fas fa-trash'></i></a>
                                   </td>
                               </tr>";
                               }
@@ -115,4 +224,21 @@ include_once("layout.php");
       "responsive": true,
     });
   });
+
+  // iNSERT DATA
+  $('#btnSimpan').on('click', function(){
+    let id = $('#id_mentor').val();
+    let nama = $('#nama_mentor').val();
+    let jenis_kelamin = $('#jk').val();
+    let alamat = $('#alamat').val();
+    let no_telp = $('#no_telp').val();
+    let username = $('#username').val();
+    let password = $('#password').val();
+    
+    if(id == '' || nama == '' || jenis_kelamin == '' || alamat == '' || no_telp == '' || username == '' || password == ''){
+      Swal.fire('Warning!',
+                'Pastikan Semua data sudah terisi',
+                'warning');
+    }
+  })
 </script>

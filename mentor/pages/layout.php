@@ -134,8 +134,8 @@ function style_section()
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <li class="nav-item">
-            <a href="admin-dashboard.php" class="nav-link">
+        <li class="nav-item">
+            <a href="mentor-dashboard.php" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -144,77 +144,20 @@ function style_section()
           </li>
           <li class="nav-header">Master Data</li>
           <li class="nav-item">
-            <a href="admin-anggota.php" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
+            <a href="mentor-kategori.php" class="nav-link">
+              <i class="nav-icon fas fa-list-ol "></i>
               <p>
-                Anggota
+                Kategori Materi
               </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="admin-kelas.php" class="nav-link">
-              <i class="nav-icon fas fa-landmark"></i>
+            <a href="mentor-materi.php" class="nav-link">
+              <i class="nav-icon fas fa-book "></i>
               <p>
-                Kelas
+                Materi
               </p>
             </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-paketbelajar.php" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Paket Belajar
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-mentor.php" class="nav-link">
-              <i class="nav-icon fas fa-user-tie"></i>
-              <p>
-                Mentor
-              </p>
-            </a>
-          </li>
-          <li class="nav-header">Transaksi</li>
-          <li class="nav-item">
-            <a href="admin-pembelajaran.php" class="nav-link">
-              <i class="nav-icon fas fa-chalkboard"></i>
-              <p>
-                Pembelajaran
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-tagihan.php" class="nav-link">
-              <i class="nav-icon fas fa-receipt"></i>
-              <p>
-                Tagihan
-              </p>
-            </a>
-          </li>
-          <li class="nav-header">Laporan</li>  
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>
-                Laporan
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="admin-anggota-form-laporan.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Anggota</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="admin-tagihan-form-laporan.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pendapatan</p>
-                </a>
-              </li>
-            </ul>
           </li>
           <li class="nav-header">Akun</li>
           <li class="nav-item">
@@ -244,7 +187,7 @@ function style_section()
     </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2022 <a href="admin-dashboard.php">COURSEPEDIA</a>.</strong>
+    <strong>Copyright &copy; 2022 <a href="#">COURSEPEDIA</a>.</strong>
     All rights reserved.
     <!-- <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.2.0

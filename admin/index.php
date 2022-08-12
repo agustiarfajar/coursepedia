@@ -6,20 +6,20 @@
   <title>Coursepedia | Log in</title>
 
   <!-- Google Font: Source Sans Pro -->
-  <script src="plugins/jquery/jquery.min.js"></script>
-  <link rel="icon" href="dist/img/logo-cp.png">  
+  <script src="../komponen/plugins/jquery/jquery.min.js"></script>
+  <link rel="icon" href="../komponen/dist/img/logo-cp.png">  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="../komponen/plugins/fontawesome-free/css/all.min.css">
   <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="../komponen/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../komponen/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="index2.html"><b>Coursepedia</b></a>
+    <a href="index2.html"><b>Coursepedia - Admin</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
@@ -36,7 +36,7 @@
                 showError("Login gagal, wajib menekan tombol login.");
             else if($error == 3)
                 showError("Koneksi database gagal.");
-            else if($error == 4)
+            else if($error == "4")
                 showError("Akses dilarang, wajib login!");
         }
       ?>
@@ -74,8 +74,8 @@
 <!-- jQuery -->
 
 <!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../komponen/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
+<script src="../komponen/dist/js/adminlte.min.js"></script>
 </body>
 </html>

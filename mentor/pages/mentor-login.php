@@ -1,9 +1,5 @@
 <?php 
 include_once("functions.php");
-session_start();
-if(!isset($_SESSION["id_anggota"])){
-    header("Location: login.php?error=proses");
-}
 ?>
 <?php 
 $db = dbConnect();
@@ -13,7 +9,7 @@ if($db->connect_errno==0)
     {
         $username = $db->escape_string($_POST["username"]);
         $password = $db->escape_string($_POST["pass"]);
-        $sql = "SELECT * FROM anggota WHERE username='$username' AND pass=PASSWORD('$password')";
+        $sql = "SELECT * FROM mentor WHERE username='$username' AND pass=PASSWORD('$password')";
         $res = $db->query($sql);
         if($res)
         {
@@ -21,24 +17,22 @@ if($db->connect_errno==0)
             {
                 $data=$res->fetch_assoc();
                 session_start();
-                $_SESSION["id_anggota"]=$data["id_anggota"];
+                $_SESSION["id_mentor"]=$data["id_mentor"];
                 $_SESSION["nama"]=$data["nama"];
                 $_SESSION["jk"]=$data["jk"];
                 $_SESSION["alamat"]=$data["alamat"];
                 $_SESSION["no_telp"]=$data["no_telp"];
-                $_SESSION["id_paket"]=$data["id_paket"];
-                $_SESSION["email"]=$data["email"];
                 $_SESSION["username"]=$data["username"];
                 $_SESSION["password"]=$data["password"];
-                header("Location: index-anggota.php");
+                header("Location: mentor-dashboard.php");
             }
             else 
-                header("Location: login.php?error=input");
+                header("Location: ../index.php?error=1");
         }
     }
     else 
-        header("Location: login.php?error=login");
+        header("Location: ../index.php?error=2");
 }
 else 
-    header("Location: login.php?error=koneksi");
+    header("Location: ../index.php?error=3");
 ?>
